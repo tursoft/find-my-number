@@ -18,7 +18,7 @@ jobs:
       run: npm install
 
     - name: Build
-      run: npm run build
+      run: npm run build:gh-pages
 
     - name: Deploy
       if: success()
