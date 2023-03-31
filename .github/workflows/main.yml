@@ -6,6 +6,8 @@ on:
   pull_request:
     branches:
       - master
+permissions:
+  contents: write # Allow write permission to GITHUB_TOKEN to commit to deploy branch.
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -36,6 +38,3 @@ jobs:
           # run_lint: # optional
           # Will not fail the step if anything fails
           # skip_failure: # optional
-
-permissions:
-  contents: write # Allow write permission to GITHUB_TOKEN to commit to deploy branch.
