@@ -8,8 +8,6 @@ on:
       - master
 jobs:
   build-and-deploy:
-    permissions:
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
@@ -38,3 +36,6 @@ jobs:
           # run_lint: # optional
           # Will not fail the step if anything fails
           # skip_failure: # optional
+
+permissions:
+  contents: write # Allow write permission to GITHUB_TOKEN to commit to deploy branch.
