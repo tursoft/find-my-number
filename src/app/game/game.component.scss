@@ -1,0 +1,146 @@
+:host {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.main {
+    display: flex;
+    flex-direction: row;
+
+    .game {
+        flex: 0 0 auto;
+    }
+
+    .table {
+        margin-left: 15px;
+        border-left: 1px dashed lightgray;
+        flex: 1;
+    }
+}
+
+
+.row {
+    &.target {
+        .box {
+            background: lightblue !important;
+            font-weight: bold !important;
+            color: blue;
+            border: 1px solid blue;
+        }
+    }
+
+    &.not-submitted {
+        .box,
+        .box[disabled] {
+            background-color: lightyellow;
+            font-weight: bold;
+        }
+    }
+
+    display: flex;
+    flex-direction: row;
+
+    .row-order {
+        width: 40px;
+        height: 40px;
+        margin: 2px;
+        border: 1px solid transparent;
+        padding: 4px;
+        text-align: center;
+        font-weight: normal;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .box {
+        width: 40px;
+        height: 40px;
+        margin: 2px;
+        border: 1px solid gray;
+        padding: 4px;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 4px;
+
+        &.div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &[disabled] {
+            background-color: lightgray;
+            font-weight: normal;
+        }
+
+        &.submitted {
+            cursor: pointer;
+            &.rightPlace {
+                border: 1px solid green;
+                color: green;
+                background-color: lightgoldenrodyellow;
+            }
+
+            &.wrongPlace {
+                border: 1px solid red;
+                color: red;
+                background-color: pink;
+            }
+
+            &.canBe {
+                border: 1px solid orange;
+                color: orange;
+                background-color: lightyellow;
+            }
+
+            &.cannot {
+                border: 1px solid gray;
+                color: gray;
+                background-color: lightgray;
+            }
+        }
+    }
+
+    .places {
+        vertical-align: middle;
+        padding: 4px;
+        margin: 2px;
+        font-size: 14px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dotted lightgray;
+        text-align: center;
+        width: 60px;
+
+        .right-places {
+            color: green;
+        }
+    
+        .wrong-places {
+            color: red;
+        }
+    }
+
+    .button {
+        background-color: gray;
+        &:focus,
+        &:hover {
+            background-color: blue;
+        }
+
+        border: 0px solid transparent;
+        color: white;
+        text-align: center;
+        justify-content: center;
+        justify-items: center;
+        vertical-align: middle;
+        width: 70px;
+        height: 50px;
+        padding: 4px;
+        margin: 2px;
+        border-radius: 4px;
+    }
+}

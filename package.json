@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:gh-pages": "ng build --base-href https://tursoft.github.io/find-my-number",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
