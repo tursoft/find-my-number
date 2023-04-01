@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
-type DigitGuessMode = 'rightPlace' | 'wrongPlace' | 'canBe' | 'cannot';
+type DigitGuessModeType = 'rightPlace' | 'wrongPlace' | 'canBe' | 'cannot';
+
 interface Digit {
-  v?: number,
-  guessMode?: DigitGuessMode
+  v?: number;
+  guessMode?: DigitGuessModeType;
 }
 
 interface GuessRow {
@@ -18,6 +19,11 @@ interface PickResult {
   newItems: number[];
 }
 
+interface ErrorInfo {
+  i: number;
+  message: string;
+}
+
 @Component({
   selector: 'app-game',
   templateUrl: './game.component.html',
@@ -26,10 +32,13 @@ interface PickResult {
 export class GameComponent {
 
   digitCount = 4;
-  targetDigits: Digit[] = []
-  table: Digit[][] = []
+  targetDigits: Digit[] = [];
+  // table: Digit[][] = [];
+  foundNumbers: Digit[] = [];
   numbers: Digit[] = []
   guessRows: GuessRow[] = [];
+
+  errors: ErrorInfo[] = [];
 
   constructor() {
     this.init();
@@ -41,7 +50,6 @@ export class GameComponent {
     result.pickedValue = items[index];
     result.newItems = items.filter(i => i != result.pickedValue);
 
-    console.log('pickItem:', { index, v: result.pickedValue, items, newItems: result.newItems });
     return result;
 
   }
@@ -72,19 +80,25 @@ export class GameComponent {
       this.numbers.push({ v: i });
     }
 
-    // table
-    this.table = [];
+    // foundNumbers
+    this.foundNumbers = [];
     for(let i = 0; i<10; i++) {
-      const digits = this.getDigits(i);
-      this.table.push(digits);
+      this.foundNumbers.push({ v: i });
     }
+
+    // table
+    // this.table = [];
+    // for(let i = 0; i<10; i++) {
+    //   const digits = this.getDigits(i);
+    //   this.table.push(digits);
+    // }
 
     this.addEmpty();
   }
 
   addNew(row: GuessRow) {
     // validate
-    const errors: { i: number, error: string }[] = [];
+    const errors: ErrorInfo[] = [];
     const usedValues: number[] = [];
 
     for(let i=0;i<row.digits.length;i++) {
@@ -92,24 +106,29 @@ export class GameComponent {
       const digitValue = parseInt(<any>digitValueText);
       if (digitValueText == undefined || digitValueText == '')
       {
-        errors.push({ i, error: 'value empty!' });
+        errors.push({ i, message: '[' + (i+1) + '] Value empty!' });
       } else if (isNaN(digitValue)) {
-        errors.push({ i, error: 'not a number!' });
+        errors.push({ i, message: '[' + (i+1) + '] Not a number!' });
       }
 
       if (i==0 && digitValueText?.toString()=='0') {
-        errors.push({ i, error: '0 canot be used!' });
-      }
-
-      if (!isNaN(digitValue) && usedValues.indexOf(digitValue)>=0) {
-        errors.push({ i, error: 'number already used!' });
+        errors.push({ i, message: '[' + (i+1) + '] 0 cannot be used in first digit!' });
       }
 
       if (!isNaN(digitValue) && !(digitValue>=0 && digitValue<=9)) {
-        errors.push({ i, error: 'should be between 0-9!' });
+        errors.push({ i, message: '[' + (i+1) + '] Digits should be between 0-9!' });
+      }
+
+      if (!isNaN(digitValue)) {
+        if (usedValues.indexOf(digitValue)>=0) {
+          errors.push({ i, message: '[' + (i+1) + '] Using same number multiple times not allowed!' });
+        }
+
+        usedValues.push(digitValue);
       }
     }
 
+    this.errors = errors;
     if (errors.length>0) {
       console.log('Cannot be added! Errors:', errors);
       return;
@@ -131,11 +150,9 @@ export class GameComponent {
 
       const number = this.numbers.find(p => p.v == digitValue);
       if (number && number.guessMode == undefined) {
-        number.guessMode = 'canBe';
-        console.log('guessMode:', { number });
+        this.setDigitMode(number, 'canBe', false);
       }
     }
-
 
     if (row.rightPlace==4) {
       for(const digit of row.digits) {
@@ -166,7 +183,6 @@ export class GameComponent {
   onDigitKeyUp(event: KeyboardEvent, index: number, digits: Digit[]) {
     const valueText = event.key;
     const srcElement: any = event.srcElement;
-    console.log('onDigitKeyUp1:', { index, valueText, event });
 
     if (index == 0 && valueText == '0') {
       if (srcElement) {
@@ -176,7 +192,6 @@ export class GameComponent {
     }
 
     const value = parseInt(valueText);
-    console.log('onDigitKeyUp2:', { index, valueText, value });
 
     if (isNaN(value) || value>9) {
       srcElement.value = null;
@@ -191,18 +206,56 @@ export class GameComponent {
     nextElement?.focus();
   }
 
-  toggleDigitMode(digit: Digit) {
-  
+  toggleDigitMode(digit: Digit, applyToAll: boolean) {
+    let newGuessMode: DigitGuessModeType | undefined = undefined;
+
     if (digit.guessMode == undefined) {
-      digit.guessMode = 'rightPlace';
+      newGuessMode = 'rightPlace';
     } else if (digit.guessMode == 'rightPlace') {
-      digit.guessMode = 'wrongPlace';
+      newGuessMode = 'wrongPlace';
     } else if (digit.guessMode == 'wrongPlace') {
-      digit.guessMode = 'canBe';
+      newGuessMode = 'canBe';
     } else if (digit.guessMode == 'canBe') {
-      digit.guessMode = 'cannot';
+      newGuessMode = 'cannot';
     } else {
-      digit.guessMode = undefined;
+      newGuessMode = undefined;
+    }
+
+    this.setDigitMode(digit, newGuessMode, applyToAll);
+  }
+
+  setDigitMode(digit: Digit, newGuessMode: DigitGuessModeType | undefined, applyToAll: boolean) {
+  
+    digit.guessMode = newGuessMode;
+
+    // applyToAll
+    if (!applyToAll)
+      return;
+
+    const number = digit.v;
+
+    // guesses
+    for(const guessRow of this.guessRows) {
+      for(const digit of guessRow.digits) {
+        if (digit.v == number) {
+          digit.guessMode = newGuessMode;
+        }
+      } 
+    }
+
+    // table
+    // for(const digits of this.table) {
+    //   for(const digit of digits) {
+    //     if (digit.v == number) {
+    //       digit.guessMode = newGuessMode;
+    //     }
+    //   } 
+    // }
+
+    for(const digit of this.numbers) {
+      if (digit.v == number) {
+        digit.guessMode = newGuessMode;
+      }
     }
   }
 }

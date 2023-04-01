@@ -1,10 +1,12 @@
-<button (click)="init()">New Game</button>
-
 <div class="main">
+    <div class="game">
+        <div class="buttons">
+            <h1 class="title">Find My Number</h1>
+            <button class="btn-new" (click)="init()">New Game</button>
+        </div>
 
-    <div class="game" style="margin-top: 90px">
         <!-- Number //-->
-        <div class="row target">
+        <div class="row target" style="margin-top: 90px; margin-bottom: 20px;">
             <div class="row-order"></div>
             <div class="box div"
                 *ngFor="let digit of targetDigits">
@@ -27,7 +29,7 @@
                 <div 
                     *ngIf="guessRow.submitted"
                     class="box div {{digit.guessMode}} {{guessRow.submitted ? 'submitted' : ''}} {{!guessRow.submitted ? 'not-submitted' : ''}}"
-                    (click)="toggleDigitMode(digit)">
+                    (click)="toggleDigitMode(digit, false)">
                     {{ digit.v }}
                 </div>
             </div>
@@ -48,36 +50,53 @@
                 </button>
             </div>
         </div>
+
+        <!-- Error //-->
+        <div class="errors">
+            <div class="error-row" *ngFor="let error of errors">
+                {{ error.message }}
+            </div>
+        </div>
     </div>
 
     <div class="table">
+        <!-- foundNumbers //-->
+        <div class="row" style="margin-bottom: 0px">
+            <div class="row-order"></div>
+            <div class="box div {{digit.guessMode}} submitted"
+                *ngFor="let digit of foundNumbers"
+                (click)="toggleDigitMode(digit, true)">
+                {{ digit.v }}
+            </div>
+        </div>
+
         <!-- Numbers //-->
         <div class="row" style="margin-bottom: 30px">
             <div class="row-order"></div>
             <div class="box div {{digit.guessMode}} submitted"
                 *ngFor="let digit of numbers"
-                (click)="toggleDigitMode(digit)">
+                (click)="toggleDigitMode(digit, false)">
                 {{ digit.v }}
             </div>
         </div>
         
         <!-- Target //-->
-        <div class="row target">
+        <!-- <div class="row target">
             <div class="row-order"></div>
             <div class="box div"
                 *ngFor="let digit of targetDigits">
                 ?
             </div>
-        </div>
+        </div> -->
 
         <!-- Usage //-->
-        <div class="row submitted" *ngFor="let row of table">
+        <!-- <div class="row submitted" *ngFor="let row of table">
             <div class="row-order"></div>
             <div class="box div {{digit.guessMode}} submitted"
                 *ngFor="let digit of row"
-                (click)="toggleDigitMode(digit)">
+                (click)="toggleDigitMode(digit, false)">
                 {{ digit.v }}
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
