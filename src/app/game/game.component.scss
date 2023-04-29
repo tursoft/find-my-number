@@ -1,5 +1,7 @@
 :host {
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
 }
 
 .title {
@@ -46,7 +48,6 @@
         flex: 1;
     }
 }
-
 
 .row {
     &.target {
