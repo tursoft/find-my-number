@@ -1,0 +1,86 @@
+<div class="player">
+    <div class="table-panel">
+        <div class="table">
+            <!-- foundNumbers //-->
+            <div class="row" style="margin-bottom: 0px">
+                <div class="row-order"></div>
+                <div class="box div {{digit.guessMode}} submitted"
+                    *ngFor="let digit of player.foundNumbers"
+                    (click)="player.toggleDigitMode(digit, true)">
+                    {{ digit.v }}
+                </div>
+            </div>
+    
+            <!-- Numbers //-->
+            <div class="row" style="margin-bottom: 30px">
+                <div class="row-order"></div>
+                <div class="box div {{digit.guessMode}} submitted"
+                    *ngFor="let digit of player.numbers"
+                    (click)="player.toggleDigitMode(digit, false)">
+                    {{ digit.v }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="player-name">
+        {{player.playerName}}
+    </div>
+
+    <div class="player-panel">
+        <div class="player-numbers">
+            <!-- Number //-->
+            <div class="row target" style="margin-top: 20px; margin-bottom: 20px;">
+                <div class="row-order"></div>
+                <div class="box div"
+                    *ngFor="let digit of player.targetDigits">
+                    ?
+                </div>
+            </div>
+
+            <!-- Guesses //-->
+            <div *ngFor="let guessRow of player.guessRows; let i = index"
+                [ngClass]="{'row': true, 'submitted': guessRow.submitted, 'not-submitted': !guessRow.submitted}">
+                <div class="row-order">{{ (i+1) }}</div>
+
+                <div *ngFor="let digit of guessRow.digits; let i = index" >
+                    <input type="text"
+                        *ngIf="!guessRow.submitted"
+                        class="box"
+                        [(ngModel)]="digit.v" 
+                        (keyup)="onDigitKeyUp($event, i, guessRow.digits)"/>
+
+                    <div 
+                        *ngIf="guessRow.submitted"
+                        class="box div {{digit.guessMode}} {{guessRow.submitted ? 'submitted' : ''}} {{!guessRow.submitted ? 'not-submitted' : ''}}"
+                        (click)="player.toggleDigitMode(digit, false)">
+                        {{ digit.v }}
+                    </div>
+                </div>
+
+                <div class="places" *ngIf="guessRow.submitted">
+                    <span class="right-places" *ngIf="guessRow.rightPlace && guessRow.rightPlace>0">
+                        + {{guessRow.rightPlace}}
+                    </span>
+                    <span class="wrong-places" *ngIf="guessRow.wrongPlace && guessRow.wrongPlace>0">
+                        - {{guessRow.wrongPlace}}
+                    </span>
+                </div>
+
+                <div>
+                    <button class="button" *ngIf="!guessRow.submitted"
+                            (click)="player.addNewGuess(guessRow)">
+                        submit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error //-->
+            <div class="errors">
+                <div class="error-row" *ngFor="let error of player.errors">
+                    {{ error.message }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

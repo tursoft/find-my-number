@@ -1,102 +1,15 @@
+<div class="buttons">
+    <h1 class="title">Find My Number</h1>
+    <button class="btn-new" (click)="createNewGame()">New Game</button>
+</div>
+
 <div class="main">
-    <div class="game">
-        <div class="buttons">
-            <h1 class="title">Find My Number</h1>
-            <button class="btn-new" (click)="init()">New Game</button>
-        </div>
 
-        <!-- Number //-->
-        <div class="row target" style="margin-top: 90px; margin-bottom: 20px;">
-            <div class="row-order"></div>
-            <div class="box div"
-                *ngFor="let digit of targetDigits">
-                ?
-            </div>
-        </div>
+    <!-- Player 1 //-->
+    <app-player-game class="player1" [player]="player1">
+    </app-player-game>
 
-        <!-- Guesses //-->
-        <div [ngClass]="{'row': true, 'submitted': guessRow.submitted, 'not-submitted': !guessRow.submitted}"
-            *ngFor="let guessRow of guessRows; let i = index">
-            <div class="row-order">{{ (i+1) }}</div>
-        
-            <div *ngFor="let digit of guessRow.digits; let i = index" >
-                <input type="text"
-                    *ngIf="!guessRow.submitted"
-                    class="box"
-                    [(ngModel)]="digit.v" 
-                    (keyup)="onDigitKeyUp($event, i, guessRow.digits)"/>
-
-                <div 
-                    *ngIf="guessRow.submitted"
-                    class="box div {{digit.guessMode}} {{guessRow.submitted ? 'submitted' : ''}} {{!guessRow.submitted ? 'not-submitted' : ''}}"
-                    (click)="toggleDigitMode(digit, false)">
-                    {{ digit.v }}
-                </div>
-            </div>
-
-            <div class="places" *ngIf="guessRow.submitted">
-                <span class="right-places" *ngIf="guessRow.rightPlace && guessRow.rightPlace>0">
-                    + {{guessRow.rightPlace}}
-                </span>
-                <span class="wrong-places" *ngIf="guessRow.wrongPlace && guessRow.wrongPlace>0">
-                    - {{guessRow.wrongPlace}}
-                </span>
-            </div>
-
-            <div>
-                <button class="button" *ngIf="!guessRow.submitted"
-                        (click)="addNew(guessRow)">
-                    submit
-                </button>
-            </div>
-        </div>
-
-        <!-- Error //-->
-        <div class="errors">
-            <div class="error-row" *ngFor="let error of errors">
-                {{ error.message }}
-            </div>
-        </div>
-    </div>
-
-    <div class="table">
-        <!-- foundNumbers //-->
-        <div class="row" style="margin-bottom: 0px">
-            <div class="row-order"></div>
-            <div class="box div {{digit.guessMode}} submitted"
-                *ngFor="let digit of foundNumbers"
-                (click)="toggleDigitMode(digit, true)">
-                {{ digit.v }}
-            </div>
-        </div>
-
-        <!-- Numbers //-->
-        <div class="row" style="margin-bottom: 30px">
-            <div class="row-order"></div>
-            <div class="box div {{digit.guessMode}} submitted"
-                *ngFor="let digit of numbers"
-                (click)="toggleDigitMode(digit, false)">
-                {{ digit.v }}
-            </div>
-        </div>
-        
-        <!-- Target //-->
-        <!-- <div class="row target">
-            <div class="row-order"></div>
-            <div class="box div"
-                *ngFor="let digit of targetDigits">
-                ?
-            </div>
-        </div> -->
-
-        <!-- Usage //-->
-        <!-- <div class="row submitted" *ngFor="let row of table">
-            <div class="row-order"></div>
-            <div class="box div {{digit.guessMode}} submitted"
-                *ngFor="let digit of row"
-                (click)="toggleDigitMode(digit, false)">
-                {{ digit.v }}
-            </div>
-        </div> -->
-    </div>
+    <!-- Player 2 //-->
+    <app-player-game class="player2" [player]="player2">
+    </app-player-game>
 </div>
