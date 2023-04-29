@@ -9,7 +9,9 @@ export class UserEngine
   guessRows: GuessRow[] = [];
   errors: ErrorInfo[] = [];
 
-  constructor(public gameSettings: GameSettings) {
+  constructor(
+    public gameSettings: GameSettings,
+    public playerName: string) {
   }
 
   pickItem(items: number[]): PickResult {

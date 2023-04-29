@@ -4,202 +4,42 @@
     flex-direction: column;
 }
 
-.title {
-    margin-left: 40px;
-    font-family: arial;
-    color: lightblue
-}
-
-.buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-
-    .btn-new {
-        padding: 8px;
-        min-width: 100px;
-        height: 40px;
-        margin: 20px 10px 10px 30px;
-        border: 0px solid transparent;
-        background-color: darkgreen;
-        cursor: pointer;
-        color: white;
-    
-        &:hover {
-            background-color: green;
-        }
-    }
-}
-
-.main {
-    display: flex;
-    flex-direction: row;
-
-    .game {
-        flex: 0 0 auto;
-        background-color: #242424;
-        padding: 20px 20px 60px 20px;
-        border-radius: 8px;
+::ng-deep {
+    .title {
+        margin-left: 40px;
+        font-family: arial;
+        color: lightblue
     }
 
-    .table {
-        margin-left: 15px;
-        // border-left: 1px dashed lightgray;
-        flex: 1;
-    }
-}
-
-.row {
-    &.target {
-        .box {
-            background: lightblue !important;
-            font-weight: bold !important;
-            color: black;
-            border: 1px solid transparent;
-        }
-    }
-
-    &.not-submitted {
-        .box,
-        .box[disabled] {
-            background-color: white;
-            color: black;
-            font-weight: bold;
-        }
-    }
-
-    display: flex;
-    flex-direction: row;
-
-    .row-order {
-        width: 40px;
-        height: 40px;
-        margin: 2px;
-        border: 1px solid transparent;
-        padding: 4px;
-        text-align: center;
-        font-weight: normal;
-        border-radius: 4px;
+    .buttons {
         display: flex;
-        align-items: center;
+        flex-direction: row;
         justify-content: center;
-        color: lightgray;
-    }
 
-    .box {
-        width: 40px;
-        height: 40px;
-        margin: 2px;
-        border: 1px solid gray;
-        color: white;
-        padding: 4px;
-        text-align: center;
-        font-weight: bold;
-        border-radius: 4px;
-
-        &.div {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        &[disabled] {
-            background-color: lightgray;
-            font-weight: normal;
-        }
-
-        &.submitted {
-            cursor: pointer;
-            &.rightPlace {
-                border: 1px solid green;
-                color: green;
-                background-color: lightgoldenrodyellow;
-            }
-
-            &.wrongPlace {
-                border: 1px solid red;
-                color: red;
-                background-color: pink;
-            }
-
-            &.canBe {
-                border: 1px solid orange;
-                color: orange;
-                background-color: lightyellow;
-            }
-
-            &.cannot {
-                border: 1px solid gray;
-                color: gray;
-                background-color: lightgray;
-            }
-        }
-    }
-
-    .places {
-        vertical-align: middle;
-        padding: 4px;
-        margin: 2px;
-        font-size: 14px;
-        font-weight: bold;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 0px dotted lightgray;
-        text-align: center;
-        width: 120px;
-
-        .right-places {
-            margin: 4px;
+        .btn-new {
             padding: 8px;
-            background-color: green;
-            color: white;
-            border-radius: 50%;
-        }
-    
-        .wrong-places {
-            margin: 4px;
-            padding: 8px;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-        }
-    }
-
-    .button {
-        background-color: transparent;
-        border: 1px solid gray;
-        color: gray;
-        text-align: center;
-        justify-content: center;
-        justify-items: center;
-        vertical-align: middle;
-        width: 120px;
-        height: 50px;
-        padding: 4px;
-        margin: 2px;
-        border-radius: 4px;
-
-        &:focus,
-        &:hover {
-            background-color: orange;
-            color: white;
+            min-width: 100px;
+            height: 40px;
+            margin: 20px 10px 10px 30px;
             border: 0px solid transparent;
+            background-color: darkgreen;
+            cursor: pointer;
+            color: white;
+        
+            &:hover {
+                background-color: green;
+            }
         }
     }
-}
 
-.errors {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    margin: 40px 4px 4px 4px;
+    .main {
+        display: flex;
+        flex-direction: row;
 
-    .error-row {
-        flex: 1;
-        background-color: red;
-        color: white;
-        margin: 1px;
-        padding: 4px 10px;
+        .player1,
+        .player2 {
+            flex: 1;
+            margin: 10px;
+        }
     }
 }

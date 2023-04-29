@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { GameSettings } from './shared/game-settings';
-import { Digit } from './shared/models';
-import { UserEngine } from './shared/user-engine';
+import { GameSettings } from '../shared/game-settings';
+import { Digit } from '../shared/models';
+import { UserEngine } from '../shared/user-engine';
 
 @Component({
   selector: 'app-game',
@@ -14,40 +14,17 @@ export class GameComponent {
     digitCount: 4
   }
 
-  localUser = new UserEngine(this.gameSettings);
+  player1 = new UserEngine(this.gameSettings, 'PLAYER 1');
+  player2 = new UserEngine(this.gameSettings, 'PLAYER 2');
 
   constructor() {
     this.createNewGame();
   }
 
   createNewGame() {
-    this.localUser.init();
+    this.player1.init();
+    this.player2.init();
   }
 
-  onDigitKeyUp(event: KeyboardEvent, index: number, digits: Digit[]) {
-    const valueText = event.key;
-    const srcElement: any = event.srcElement;
-
-    if (index == 0 && valueText == '0') {
-      if (srcElement) {
-        srcElement.value = null;
-        return;
-      }
-    }
-
-    const value = parseInt(valueText);
-
-    if (isNaN(value) || value>9) {
-      srcElement.value = null;
-      return;
-    }
-
-    this.gotoNextElement(srcElement);
-  }
-
-  gotoNextElement(srcElement: Element) {
-    const nextElement: any = srcElement?.parentElement?.nextElementSibling?.firstChild;
-    nextElement?.focus();
-  }
   
 }
